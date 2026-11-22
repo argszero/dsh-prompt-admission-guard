@@ -1,0 +1,26 @@
+# The layer this bundle contributes: one row, the prompt admission boundary.
+#
+# It changes no prompt and refuses nothing on its own — with no filter
+# registered, every message is admitted unchanged. It installs the shadow around
+# `Session.append`, the durable log's single acceptance boundary, and fans it out
+# to the `promptAdmission` registry, so plugins that declare
+# `inject: ['promptAdmission']` can refuse a person's prompt before it is
+# recorded. The displaced method is restored when this row unloads.
+- insert:
+    - id: prompt-admission-guard
+      name: '@argszero/dsh-prompt-admission-guard'
+      config:
+        # `enforce` (default) refuses what a filter refuses: no `agent/inbox/spliced`
+        # row, no `agent/inbox/inserted`, no driver wake, and the sender reads the
+        # refusal text. `observe` runs every filter and counts what it would have
+        # refused, but writes every message unchanged — mount this first on a
+        # deployment whose behaviour you do not want to change yet. `off` mounts
+        # nothing.
+        mode: enforce
+        # The `source.kind` values that make a message a person's prompt. `user` is
+        # what the session controller attaches to a composer prompt; anything else
+        # is context the harness or a plugin injected.
+        kinds:
+          - user
+        # Log each refusal, each would-be refusal and each filter failure.
+        report: true
