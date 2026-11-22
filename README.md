@@ -41,12 +41,18 @@ prints `String(error)` will show.
 ## Install
 
 ```sh
-dsh plugin add @argszero/dsh-prompt-admission-guard
+dsh plugin add github:argszero/dsh-prompt-admission-guard#v0.1.0
 ```
 
-`npm install` alone does not mount a plugin in a profile — `dsh plugin add` is
-what records it. The bundle patch ships one row with the defaults below; edit
-them in your profile after mounting.
+The package is not on npm yet, so this repository is the distribution channel: the
+tag carries the built `lib/`, the bundle patch and this file. Both resolvers that
+reach it were measured at this tag — `npm install` and `pnpm add`, the one
+`dsh plugin add` runs — and the installed copy loads with its default export
+intact.
+
+A plain `npm install` does not mount a plugin in a profile; `dsh plugin add` is
+what records the row. Once mounted, the bundle patch contributes one row with the
+defaults below — edit them in your profile.
 
 ## Configuration
 
